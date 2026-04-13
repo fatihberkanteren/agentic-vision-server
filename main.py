@@ -18,7 +18,7 @@ url: str = os.getenv("SUPABASE_URL")
 key: str = os.getenv("SUPABASE_KEY")
 supabase: Client = create_client(url, key)
 
-# API Bilgilerin buraya sabitlendi
+# API Bilgileri
 ROBOFLOW_API_KEY = os.getenv("ROBOFLOW_API_KEY")
 MODEL_ENDPOINT = "ppe-fruwx/5"
 
