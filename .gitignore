@@ -1,0 +1,53 @@
+# --- GÜVENLİK (Kritik) ---
+# API anahtarlarını ve gizli değişkenleri asla GitHub'a gönderme
+.env
+.env.*
+
+# --- PYTHON ---
+# Derlenmiş dosyalar ve önbellekler
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# --- ÇALIŞMA ORTAMI VE MODELLER ---
+# Yerel test resimleri ve indirilmiş modelleri (büyük dosyalar) dışarıda tut
+images/
+models/
+*.pt
+*.onnx
+
+# --- IDE & EDİTÖR ---
+# Cursor ve VS Code'a özel yerel ayarlar
+.vscode/
+.cursor/
+.idea/
+*.swp
+*.swo
+
+# --- SANAL ORTAMLAR ---
+# Conda veya venv klasörlerini gönderme (requirements.txt yeterli)
+env/
+venv/
+.venv/
+.conda/
+
+# --- İŞLETİM SİSTEMİ ---
+.DS_Store
+Thumbs.db
