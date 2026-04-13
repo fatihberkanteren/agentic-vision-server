@@ -1,100 +1,33 @@
-👷‍♂️ Agentic Vision: Otonom İSG Denetim Ajanı 🚀
-
-Model Context Protocol (MCP) + YOLOv8 + FastAPI + Supabase
-
-Bu proje, Büyük Dil Modellerine (LLM) gerçek dünyayı görme, yorumlama ve aksiyon alma yeteneği kazandıran, Model Context Protocol (MCP) tabanlı otonom bir İş Sağlığı ve Güvenliği (İSG) denetim sistemidir.
-
-🌟 Neden Agentic Vision?
-
-Standart nesne tespiti projelerinden farklı olarak bu sistem, bir "Agentic Workflow" üzerine inşa edilmiştir. LLM sadece bir sonuç üretmez; yerel dosya sistemini tarar, API'leri tetikler ve elde ettiği veriyi yasal mevzuat (6331 Sayılı İSG Kanunu) çerçevesinde anlamlandırarak kurumsal hafızaya (Database) kaydeder.
-
-✨ Öne Çıkan Özellikler
-
-🤖 Otonom Karar Alma: LLM'in dosya sistemindeki en güncel kamera kaydını kendisinin bulup analiz etmesi.
-
-⚡ Hızlı Analiz (Inference): YOLOv8 tabanlı mimari ile yüksek doğrulukta baret ve yelek tespiti.
-
-📊 Akıllı Raporlama: Ham JSON verisinden profesyonel, okunabilir İSG denetim raporları üretme.
-
-🛡️ Güvenli Loglama: Tespit edilen her ihlalin anlık olarak Supabase PostgreSQL üzerine işlenmesi.
-
-🏗️ Sistem Mimarisi
-
-graph TD
-    A[Claude Desktop / LLM] -->|MCP Request| B(MCP Server - FastMCP)
-    B -->|Scan Images| C{Local Storage}
-    B -->|POST /analyze| D[FastAPI Backend]
-    D -->|Inference Request| E((Roboflow Cloud API))
-    E -->|JSON Result| D
-    D -->|Insert Log| F[(Supabase DB)]
-    D -->|Formatted Result| B
-    B -->|Agentic Report| A
-
-
-🚀 Hızlı Başlangıç
-
-1. Depoyu Klonlayın
-
+👷‍♂️ Agentic Vision: Otonom İSG Denetim AjanıModel Context Protocol (MCP) tabanlı, LLM güdümlü otonom güvenlik denetim sistemi.📖 Proje HakkındaAgentic Vision, standart bir nesne tespiti projesinden çok daha fazlasıdır. Bu sistem, Claude 3.5 Sonnet gibi gelişmiş Büyük Dil Modellerine (LLM) gerçek dünyayı görme, yorumlama ve aksiyon alma yeteneği kazandıran bir "Yapay Zeka Ajanı" mimarisidir.🧠 Neden "Agentic"?Sistem sadece bir görüntüdeki nesneleri saymaz; Model Context Protocol (MCP) kullanarak yerel dosya sistemini aktif olarak tarar, en güncel kamera kaydını kendisi seçer, analiz API'sini tetikler ve elde ettiği sonuçları 6331 sayılı İş Sağlığı ve Güvenliği Kanunu çerçevesinde profesyonel bir rapora dönüştürerek Supabase veritabanına kalıcı olarak işler.🏗️ Sistem MimarisiAşağıdaki şema, uçtan uca veri akışını ve ajan tabanlı iş akışını göstermektedir:graph TD
+    User([👤 Kullanıcı]) -->|Soru: İSG kontrolü yap| Claude[🧠 Claude 3.5 Sonnet]
+    Claude -->|MCP Tool Call| MCP_Server{⚙️ MCP Server}
+    MCP_Server -->|Otonom Dosya Tarama| Local_Storage[(📁 images/ Folder)]
+    MCP_Server -->|POST /analyze| FastAPI[🚀 FastAPI Backend]
+    FastAPI -->|Inference Request| Roboflow((☁️ Roboflow Cloud API))
+    FastAPI -->|Log Kaydı| Supabase[(🗄️ Supabase DB)]
+    Roboflow -.->|Tespit Verisi| FastAPI
+    FastAPI -.->|JSON Result| MCP_Server
+    MCP_Server -.->|Rapor Verisi| Claude
+    Claude -->|Dinamik Dashboard Raporu| User
+✨ Öne Çıkan Özellikler🤖 Otonom Keşif: Ajanın, dosya yoluna ihtiyaç duymadan en güncel kaydı kendisinin bulması.👁️ Yüksek Doğruluk: YOLOv8 mimarisi ile eğitilmiş modeller üzerinden baret ve yelek tespiti.💾 Kurumsal Hafıza: Her denetimin anlık olarak PostgreSQL (Supabase) üzerine loglanması.📜 Mevzuat Entegrasyonu: Ham verilerin İSG hukukuna uygun rapor formatına dönüştürülmesi.🔌 MCP Standartları: Anthropic'in en yeni Model Context Protocol standartlarına tam uyum.🚀 Kurulum ve Başlatma1. Ortam Hazırlığı# Repo'yu klonlayın
 git clone [https://github.com/fatihberkanteren/agentic-vision-server.git](https://github.com/fatihberkanteren/agentic-vision-server.git)
 cd agentic-vision-server
 
-
-2. Bağımlılıkları Kurun
-
+# Sanal ortam oluşturun
 conda create -n agentic-vision python=3.10 -y
 conda activate agentic-vision
 pip install -r requirements.txt
-
-
-3. Çevre Değişkenleri (.env)
-
-Proje ana dizininde bir .env dosyası oluşturun:
-
-ROBOFLOW_API_KEY=your_api_key
-SUPABASE_URL=your_project_url
-SUPABASE_KEY=your_service_key
-
-
-⚙️ Claude Desktop Entegrasyonu
-
-Claude Desktop ayarlarınızdaki (claude_desktop_config.json) mcpServers kısmına aşağıdaki bloğu ekleyin:
-
-{
+2. Yapılandırma (.env)Ana dizinde bir .env dosyası oluşturun ve aşağıdaki anahtarları girin:ROBOFLOW_API_KEY=...
+SUPABASE_URL=...
+SUPABASE_KEY=...
+3. Servisleri BaşlatınTerminal 1 (Backend API):uvicorn main:app --reload
+Terminal 2 (MCP Server):python mcp_server.py
+⚙️ Claude Desktop EntegrasyonuClaude Desktop uygulamasında bu ajanı aktif etmek için claude_desktop_config.json dosyanıza aşağıdaki sunucu tanımını ekleyin:{
   "mcpServers": {
     "agentic-vision": {
-      "command": "C:/path/to/your/python.exe",
-      "args": ["C:/path/to/your/project/mcp_server.py"]
+      "command": "C:/path/to/python.exe",
+      "args": ["C:/path/to/agentic-vision-server/mcp_server.py"]
     }
   }
 }
-
-
-Not: Windows kullanıcıları python.exe ve mcp_server.py için tam dosya yolunu (Absolute Path) kullanmalıdır.
-
-🎯 Örnek Çıktı (Demo)
-
-Sisteme tek bir komut vermeniz yeterlidir:
-
-"Saha kameralarını kontrol et, İSG ihlali varsa raporla."
-
-Sistem Yanıtı:
-
-Dosya
-
-Bölge
-
-İhlal Türü
-
-Güven Skoru
-
-kamera_04.jpg
-
-Bölge B
-
-Baret Eksik (no_helmet)
-
-%92
-
-👨‍💻 Geliştirici
-
-Fatih Berkant EREN - LinkedIn | GitHub
+Not: Windows kullanıcıları dosya yollarında / yerine \\ kullanabilir veya yolların doğruluğundan emin olmalıdır.📈 Kullanım ÖrneğiSistem hazır olduğunda Claude'a şu komutu vermeniz yeterlidir:"Saha kameralarını kontrol et, bir ihlal varsa acil rapor oluştur."Sonuç: Claude arka planda analyze_image_for_safety aracını çalıştırır, images/ klasöründeki son fotoğrafı analiz eder ve size bareti/yeleği olmayan personelin listesini, güven skorlarını ve veritabanı kayıt teyidini sunar.👨‍💻 GeliştiriciFatih Berkant ERENLinkedInGitHubBu proje, Model Context Protocol (MCP) ve Agentic AI kavramlarını endüstriyel senaryolarda test etmek amacıyla geliştirilmiştir.
