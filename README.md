@@ -1,21 +1,25 @@
-👷‍♂️ Agentic Vision: Otonom İSG Denetim Ajanı (MCP + YOLOv8 + Supabase)
-Bu proje, Büyük Dil Modellerine (LLM) gerçek dünyayı "görme", "yorumlama" ve "aksiyon alma" yeteneği kazandıran, Model Context Protocol (MCP) tabanlı otonom bir İş Sağlığı ve Güvenliği (İSG) denetim sistemidir.
+👷‍♂️ Agentic Vision: Otonom İSG Denetim Ajanı 🚀
 
-Standart nesne tespiti projelerinden farkı, bir "Agentic Workflow" (Ajan Tabanlı İş Akışı) üzerine inşa edilmiş olmasıdır. Claude 3.5 Sonnet, sistemdeki kamera kayıtlarını otonom olarak bulur, analiz ettirir ve İSG mevzuatına göre risk raporu üretir.
+Model Context Protocol (MCP) + YOLOv8 + FastAPI + Supabase
 
-🚀 Öne Çıkan Özellikler
-Model Context Protocol (MCP): LLM'in yerel dosya sistemine ve özel API'lere güvenli erişimi.
+Bu proje, Büyük Dil Modellerine (LLM) gerçek dünyayı görme, yorumlama ve aksiyon alma yeteneği kazandıran, Model Context Protocol (MCP) tabanlı otonom bir İş Sağlığı ve Güvenliği (İSG) denetim sistemidir.
 
-Otonom Analiz: "images" klasörüne düşen son görüntüyü otomatik tespit ve analiz etme.
+🌟 Neden Agentic Vision?
 
-Akıllı Raporlama: Ham JSON verisini 6331 sayılı İSG Kanunu'na göre anlamlı bir rapora dönüştürme.
+Standart nesne tespiti projelerinden farklı olarak bu sistem, bir "Agentic Workflow" üzerine inşa edilmiştir. LLM sadece bir sonuç üretmez; yerel dosya sistemini tarar, API'leri tetikler ve elde ettiği veriyi yasal mevzuat (6331 Sayılı İSG Kanunu) çerçevesinde anlamlandırarak kurumsal hafızaya (Database) kaydeder.
 
-Kurumsal Hafıza: Tüm ihlallerin anlık olarak Supabase (PostgreSQL) veritabanına loglanması.
+✨ Öne Çıkan Özellikler
 
-Modern Mimari: FastAPI (Asenkron) + Roboflow (Cloud Inference).
+🤖 Otonom Karar Alma: LLM'in dosya sistemindeki en güncel kamera kaydını kendisinin bulup analiz etmesi.
 
-🛠️ Sistem Mimarisi
-Kod snippet'i
+⚡ Hızlı Analiz (Inference): YOLOv8 tabanlı mimari ile yüksek doğrulukta baret ve yelek tespiti.
+
+📊 Akıllı Raporlama: Ham JSON verisinden profesyonel, okunabilir İSG denetim raporları üretme.
+
+🛡️ Güvenli Loglama: Tespit edilen her ihlalin anlık olarak Supabase PostgreSQL üzerine işlenmesi.
+
+🏗️ Sistem Mimarisi
+
 graph TD
     A[Claude Desktop / LLM] -->|MCP Request| B(MCP Server - FastMCP)
     B -->|Scan Images| C{Local Storage}
@@ -25,39 +29,72 @@ graph TD
     D -->|Insert Log| F[(Supabase DB)]
     D -->|Formatted Result| B
     B -->|Agentic Report| A
-📦 Kurulum
-Depoyu Klonlayın:
 
-Bash
-git clone https://github.com/fatihberkanteren/agentic-vision-server.git
+
+🚀 Hızlı Başlangıç
+
+1. Depoyu Klonlayın
+
+git clone [https://github.com/fatihberkanteren/agentic-vision-server.git](https://github.com/fatihberkanteren/agentic-vision-server.git)
 cd agentic-vision-server
-Ortamı Hazırlayın (Conda/Venv):
 
-Bash
+
+2. Bağımlılıkları Kurun
+
 conda create -n agentic-vision python=3.10 -y
 conda activate agentic-vision
 pip install -r requirements.txt
-Çevre Değişkenlerini Ayarlayın:.env dosyası oluşturun ve bilgilerinizi girin:
 
-Plaintext
+
+3. Çevre Değişkenleri (.env)
+
+Proje ana dizininde bir .env dosyası oluşturun:
+
 ROBOFLOW_API_KEY=your_api_key
 SUPABASE_URL=your_project_url
 SUPABASE_KEY=your_service_key
-⚙️ Claude Desktop Entegrasyonu
-Claude Desktop ayarlarınızdaki (claude_desktop_config.json) mcpServers kısmına şunu ekleyin:
 
-JSON
+
+⚙️ Claude Desktop Entegrasyonu
+
+Claude Desktop ayarlarınızdaki (claude_desktop_config.json) mcpServers kısmına aşağıdaki bloğu ekleyin:
+
 {
   "mcpServers": {
     "agentic-vision": {
       "command": "C:/path/to/your/python.exe",
-      "args": ["mcp_server.py"]
+      "args": ["C:/path/to/your/project/mcp_server.py"]
     }
   }
 }
-🎯 Kullanım Senaryosu
-Sistem ayağa kalktıktan sonra Claude'a şu komutu vermeniz yeterlidir:
 
-"Saha kameralarını kontrol et, İSG ihlali varsa raporla ve veritabanına logla."
 
-Ajan, images/ klasöründeki son fotoğrafı bulacak, bareti/yeleği eksik personeli tespit edecek ve size profesyonel bir denetim raporu sunacaktır.
+Not: Windows kullanıcıları python.exe ve mcp_server.py için tam dosya yolunu (Absolute Path) kullanmalıdır.
+
+🎯 Örnek Çıktı (Demo)
+
+Sisteme tek bir komut vermeniz yeterlidir:
+
+"Saha kameralarını kontrol et, İSG ihlali varsa raporla."
+
+Sistem Yanıtı:
+
+Dosya
+
+Bölge
+
+İhlal Türü
+
+Güven Skoru
+
+kamera_04.jpg
+
+Bölge B
+
+Baret Eksik (no_helmet)
+
+%92
+
+👨‍💻 Geliştirici
+
+Fatih Berkant EREN - LinkedIn | GitHub
